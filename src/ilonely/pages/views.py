@@ -137,7 +137,13 @@ def user_home_view(request):
     personalPosts = list(Post.objects.filter(profile = myProfile).order_by('-datePosted'))
     # Instagram
     code = request.GET.get('code',None)
-    media_urls = get_media(code)
+    ig_media_urls = get_media(code)
+    ig_url_subset = []
+    if ig_media_urls:
+        # Only display a subset of pictures for pagination
+        for i, url in enumerate(ig_media_urls):
+            if i in range (0, 5):
+                ig_url_subset.append(url)
     comment_form = CommentForm()
 
     return render(request, 'pages/user_home.html',
@@ -148,7 +154,9 @@ def user_home_view(request):
                         'nearbyPosts' : nearbyPosts,
                         'personalPosts' : personalPosts,
                         'instagram_auth':instagram_auth_url,
-                        'ig_media_urls' : media_urls,
+                        'ig_media_urls' : ig_media_urls,
+                        'ig_url_subset' : ig_url_subset,
+                        'ig_page_number' : 1
                     }
                   )
 
@@ -583,3 +591,46 @@ def blockUsers(peopleNear, me):
             peopleNearMe.append(i)  
 
     return peopleNearMe
+
+def paginate(request):
+    # Grab a subset of the Instagram Pictures to display
+    ig_url_subset = []
+    for i, url in enumerate(ig_media_urls):
+        if i in range((ig_page_number - 1) * 5, ig_page_number * 5 - 1):
+            ig_url_subset.append(url)
+    
+
+    #posts of people I follow
+    followSet = User.objects.filter(pk__in = Follow.objects.filter(userFollowing = me).values_list('user'))
+    profilesIFollow = Profile.objects.filter(user__in = followSet)
+    followingPosts = list(Post.objects.filter(profile__in = profilesIFollow).order_by('-datePosted'))
+
+    #posts of people nearby
+    profilesNearMe = getNearby(me, 10)
+    profilesIBlock = User.objects.filter(pk__in = Block.objects.filter(userBlocking = me).values_list('user'))
+    blockedUsers = list(Profile.objects.filter(user__in = profilesIBlock))
+    nearby = list(Post.objects.filter(profile__in = profilesNearMe).order_by('-datePosted'))
+    nearbyPosts = []
+    for i in nearby:
+        if i in blockedUsers:
+            continue
+        else:
+            nearbyPosts.append(i)        
+        
+    #myPosts
+    personalPosts = list(Post.objects.filter(profile = myProfile).order_by('-datePosted'))
+
+    comment_form = CommentForm()
+    return render(request, 'pages/user_home.html',
+                    {
+                        'form': comment_form,
+                        'title' : 'User Home', 
+                        'followingPosts' : followingPosts, 
+                        'nearbyPosts' : nearbyPosts,
+                        'personalPosts' : personalPosts,
+                        'instagram_auth':instagram_auth_url,
+                        'ig_media_urls' : ig_media_urls,
+                        'ig_url_subset' : ig_url_subset, 
+                        'ig_page_number' : ig_page_number
+                    }
+                  )
