@@ -29,6 +29,6 @@
 ## Contributors
 The following people played a crucial role in the development of this project:
 
-* [Alex Tran] (https://github.com/JustSparky)
-* [Ryan Gray] (https://github.com/ryangreay)
-* [Melissa Santos] (https://github.com/melsantos)
+* [Alex Tran](https://github.com/JustSparky)
+* [Ryan Gray](https://github.com/ryangreay)
+* [Melissa Santos](https://github.com/melsantos)
