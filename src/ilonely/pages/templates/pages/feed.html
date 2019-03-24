@@ -108,7 +108,7 @@
                     <!-- Instagram Pagination-->
                     <div class="pagination">
                         <a href="#" onclick="pageDown()">&laquo;</a>
-                        <a class="active" href="#" id="igPageNumber">{{ig_page_number}}</a>  
+                        <a class="active" href="#" id="ig_page_number_display">{{ig_page_number}}</a>  
                         <a href="#" onclick="pageUp()">&raquo;</a>
                     </div>
                     {% endif %}
@@ -116,11 +116,51 @@
                     <button type="submit" class="btn btn-primary">Post</button>                   
                 </div>
             </form>
+            <form id="igPaginate" method="post" action="{% url 'feed' %}" enctype="multipart/form-data">
+                {% csrf_token %}
+            </form>
         </div>
     </div>
 </div> 
-
+<!-- Instagram Pagination -->
 <script type="text/javascript">
+    var form = document.getElementById("igPaginate");
+
+    var page_number = document.createElement("input"); //input element, text
+    page_number.setAttribute('type',"hidden");
+    page_number.setAttribute('id',"page_number");
+    page_number.setAttribute('name',"page_number");
+    
+    var ig_media_urls = document.createElement("input"); //input element, text
+    ig_media_urls.setAttribute('type',"hidden");
+    ig_media_urls.setAttribute('id',"ig_media_urls");
+    ig_media_urls.setAttribute('name',"ig_media_urls");
+    ig_media_urls.setAttribute('value', "{{ig_media_urls}}");
+        
+    var ig_page_number_display = document.getElementById("ig_page_number_display");
+    var number = parseInt(ig_page_number_display.innerHTML);
+
+    function pageUp() {
+        var limit = "{{ig_media_urls|length}}" / 5;
+        if (number < limit) {
+        	number = number + 1;
+            page_number.setAttribute("value", number.toString());
+            form.appendChild(page_number);
+            form.appendChild(ig_media_urls);
+            form.submit();
+        }
+    }
+    function pageDown() {
+        if (number > 1) {
+        	number = number - 1;
+            page_number.setAttribute("value", number.toString());
+            form.appendChild(page_number);
+            form.appendChild(ig_media_urls);
+            form.submit();
+        }
+    }
+</script>
+<script>
     /* !--code grabbed from: https://stackoverflow.com/a/10524697
      * being to used to maintain bootstrap tab position on page refresh 
      * */
@@ -178,24 +218,6 @@
     function removeImageDisplay() {
         while(preview.firstChild) {
             preview.removeChild(preview.firstChild);
-        }
-    }
-    /*  Instagram Pagination */
-    function pageUp() {
-        var igPageNumber = document.getElementById("igPageNumber");
-        var number = parseInt(igPageNumber.innerHTML);
-        var limit = "{{ig_media_urls|length}}" / 5 + 1;
-        if (number < limit) {
-        	number = number + 1;
-            igPageNumber.innerHTML = number.toString();
-        }
-    }
-    function pageDown() {
-        var igPageNumber = document.getElementById("igPageNumber");
-        var number = parseInt(igPageNumber.innerHTML);
-        if (number > 1) {
-        	number = number - 1;
-            igPageNumber.innerHTML = number.toString();
         }
     }
 </script>
