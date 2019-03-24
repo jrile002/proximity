@@ -7,7 +7,6 @@
 }
 
 #pc_label {
-    background-image: url("../../static/css/img/camera-logo-hi.png");
     background-repeat: no-repeat;
     background-size: 100% 100%;
     background-color: rgba(0,0,0,0.12);
@@ -21,11 +20,6 @@
 
 #pc_label:hover {
     background-color: #cecece;
-}
-
-#ig_link {
-    margin-left: -80px;
-    position: relative;
 }
 
 .customRadio {
