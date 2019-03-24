@@ -9,6 +9,7 @@
 * Stay up to date with the latest social events and parties 
 * And more!
 
+----
 ## Features
 * Sign in with Google
 * View locations of people and events with Google Maps
@@ -24,6 +25,7 @@
 `python src/ilonely/manage.py runserver`
 4. Open a new tab in your internet browser (preferably Google Chrome) and enter `localhost:8000` as the url
 
+----
 ## Contributors
 The following people played a crucial role in the development of this project:
 
