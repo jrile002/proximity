@@ -102,7 +102,19 @@
                         <input type="file" id="pc_image" class="mr-auto" name="pc_image" accept="image/*">
                     </div>
                     <div class="col-sm-3 mr-auto">
-                        <a id ="ig_link" class="btn btn-danger" href={{instagram_auth}} role="button">Upload from Instagram</a>
+                        <a id ="ig_link" class="btn btn-danger" href={{instagram_auth}} role="button" style="
+                            background-image: url('../media/custom_icons/instagram_logo.png');
+                            background-position: center;
+                            background-repeat: no-repeat;
+                            background-size: cover;
+                            position: relative;
+                            width: 45px;
+                            height: 40px;
+                            float: left;
+                            margin-left:-85%;"
+                            >
+
+                        </a>
                     </div>
                     {% else %}
                     <!-- Instagram Pagination-->
